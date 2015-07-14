@@ -545,7 +545,7 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
         # FIXME (Twixer) : the _validate_frame from the super class EmonHubSerialInterfacer is not called. 
         # include checks from parent
         # original line : if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
-        if not super(EmonHubSerialInterfacer, self)._validate_frame(ref, received):
+        if not super(EmonHubInterfacer, self)._validate_frame(ref, received):
             return False
 
         return received

@@ -155,9 +155,16 @@ class EmonHubInterfacer(object):
             
         # Discard if first value is not a valid node id
         n = float(received[0])
-        if n % 1 != 0 or n < 0 or n > 31:
+        if n % 1 != 0 or n < 0:
             self._log.warning(str(ref) + " Discarded RX frame 'node id outside scope' : " + str(received))
             return False
+
+        # If the node id is > 31, then we correct that
+        if n > 31:
+            self._log.debug('The node ID is outside the range (>31), the value is corrected wiht a modulo 31.')
+            node = int(n) % 31
+            received[0] = node
+            self._log.debug('The new node ID is : ' + node)
 
         # If it passes all the checks return
         return received
@@ -543,28 +550,11 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
             # set RSSI false for standard frames so RSSI is not re-appended later
             self.rssi = False
 
-        # FIXME (Twixer) : the _validate_frame from the super class EmonHubSerialInterfacer is not called. 
         # include checks from parent
         if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
-        # if not super(EmonHubInterfacer, self)._validate_frame(ref, received):
             return False
 
-     #    # Discard if first value is not a valid node id
-     #    n = float(received[0])
-	    # self._log.debug('The node ID is ' + n)
-     #    if n % 1 != 0 or n < 0:
-     #        self._log.warning(str(ref) + " Discarded RX frame 'node id outside scope' : " + str(received))
-     #        return False
-
-     #    # If the node id is > 31, then we correct that
-     #    self._log.debug('The node ID is ' + n)
-     #    if n > 31:
-     #        self._log.debug('The node ID is outside the range (>31), the value is corrected.')
-     #        node = int(n) & 0x1F
-     #        received[1] = node
-     #        self._log.debug('The new node ID is : ' + node)
-
-     #    return received
+        return received
 
     def set(self, **kwargs):
         """Send configuration parameters to the "Jee" type device through COM port

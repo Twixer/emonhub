@@ -557,7 +557,6 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
         # If the node id is > 32, then we correct that
         if n > 31:
             self._log.debug('The node ID is outside the range of (>31), the value is corrected.')
-            int node
             node = (int) n & 0x1F
             received[1] = node
             self._log.debug('The new node ID is : ' + node)

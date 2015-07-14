@@ -74,6 +74,8 @@ class EmonHubInterfacer(object):
 
         """
 
+        self._log.debug('Start processing the frame : ' + frame)
+
         # Discard the frame if 'pause' set to 'all' or 'in'
         if 'pause' in self._settings and \
                         str.lower(self._settings['pause']) in ['all', 'in']:

@@ -138,7 +138,7 @@ class EmonHubInterfacer(object):
 
         """
         
-        self._log.debug('[EmonHubInterfacer] Start validating the received frame : ' + received)
+        self._log.debug('[EmonHubInterfacer] Start validating the received frame : ' + str(received))
 
         # Discard if frame not of the form [node, val1, ...]
         # with number of elements at least 2
@@ -523,7 +523,7 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
 
         """
 
-        self._log.debug('[EmonHubJeeInterfacer] Start validating the received frame : ' + received)
+        self._log.debug('[EmonHubJeeInterfacer] Start validating the received frame : ' + str(received))
 
         if received[0] == '?'and str(received[-1])[0]=='(' and str(received[-1])[-1]==')':
             self._log.info(str(ref) + " Discard RX frame 'unreliable content' : RSSI " + str(received[-1]))
@@ -542,8 +542,10 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
             # set RSSI false for standard frames so RSSI is not re-appended later
             self.rssi = False
 
+        # FIXME (Twixer) : the _validate_frame from the super class EmonHubSerialInterfacer is not called. 
         # include checks from parent
-        if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
+        # original line : if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
+        if not super(EmonHubSerialInterfacer, self)._validate_frame(ref, received):
             return False
 
         return received

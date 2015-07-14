@@ -550,14 +550,16 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
 
         # Discard if first value is not a valid node id
         n = float(received[0])
+	self._log.debug('The node ID is ' + n)
         if n % 1 != 0 or n < 0:
             self._log.warning(str(ref) + " Discarded RX frame 'node id outside scope' : " + str(received))
             return False
 
-        # If the node id is > 32, then we correct that
+        # If the node id is > 31, then we correct that
+	self._log.debug('The node ID is ' + n)
         if n > 31:
-            self._log.debug('The node ID is outside the range of (>31), the value is corrected.')
-            node = (int) n & 0x1F
+            self._log.debug('The node ID is outside the range (>31), the value is corrected.')
+            node = int(n) & 0x1F
             received[1] = node
             self._log.debug('The new node ID is : ' + node)
 

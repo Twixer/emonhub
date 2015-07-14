@@ -138,7 +138,7 @@ class EmonHubInterfacer(object):
 
         """
         
-        self._log.debug('Validating the received frame : ' + received)
+        self._log.debug('[EmonHubInterfacer] Start validating the received frame : ' + received)
 
         # Discard if frame not of the form [node, val1, ...]
         # with number of elements at least 2
@@ -522,6 +522,8 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
         Returns True if data frame passes tests.
 
         """
+
+        self._log.debug('[EmonHubJeeInterfacer] Start validating the received frame : ' + received)
 
         if received[0] == '?'and str(received[-1])[0]=='(' and str(received[-1])[-1]==')':
             self._log.info(str(ref) + " Discard RX frame 'unreliable content' : RSSI " + str(received[-1]))

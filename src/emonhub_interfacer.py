@@ -99,6 +99,7 @@ class EmonHubInterfacer(object):
 
         # Validate frame
         validated = self._validate_frame(ref, frame)
+
         if not validated:
             #self._log.debug('Discard RX Frame "Failed validation"')
             return
@@ -135,6 +136,8 @@ class EmonHubInterfacer(object):
 
         """
         
+        self._log.debug('Validating the received frame : ' + received)
+
         # Discard if frame not of the form [node, val1, ...]
         # with number of elements at least 2
         if len(received) < 2:

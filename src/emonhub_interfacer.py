@@ -537,33 +537,34 @@ class EmonHubJeeInterfacer(EmonHubSerialInterfacer):
         if str(received[-1])[0]=='(' and str(received[-1])[-1]==')':
             self.rssi = int(received[-1][1:-1])
             received = received[:-1]
-            return received
+            # Twixer : I suppose this is an error because the code below is a dead code in case we have a RFM69 packet
+            #return received
         else:
             # set RSSI false for standard frames so RSSI is not re-appended later
             self.rssi = False
 
         # FIXME (Twixer) : the _validate_frame from the super class EmonHubSerialInterfacer is not called. 
         # include checks from parent
-        # original line : if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
-        if not super(EmonHubInterfacer, self)._validate_frame(ref, received):
+        if not super(EmonHubJeeInterfacer, self)._validate_frame(ref, received):
+        # if not super(EmonHubInterfacer, self)._validate_frame(ref, received):
             return False
 
-        # Discard if first value is not a valid node id
-        n = float(received[0])
-	self._log.debug('The node ID is ' + n)
-        if n % 1 != 0 or n < 0:
-            self._log.warning(str(ref) + " Discarded RX frame 'node id outside scope' : " + str(received))
-            return False
+     #    # Discard if first value is not a valid node id
+     #    n = float(received[0])
+	    # self._log.debug('The node ID is ' + n)
+     #    if n % 1 != 0 or n < 0:
+     #        self._log.warning(str(ref) + " Discarded RX frame 'node id outside scope' : " + str(received))
+     #        return False
 
-        # If the node id is > 31, then we correct that
-	self._log.debug('The node ID is ' + n)
-        if n > 31:
-            self._log.debug('The node ID is outside the range (>31), the value is corrected.')
-            node = int(n) & 0x1F
-            received[1] = node
-            self._log.debug('The new node ID is : ' + node)
+     #    # If the node id is > 31, then we correct that
+     #    self._log.debug('The node ID is ' + n)
+     #    if n > 31:
+     #        self._log.debug('The node ID is outside the range (>31), the value is corrected.')
+     #        node = int(n) & 0x1F
+     #        received[1] = node
+     #        self._log.debug('The new node ID is : ' + node)
 
-        return received
+     #    return received
 
     def set(self, **kwargs):
         """Send configuration parameters to the "Jee" type device through COM port

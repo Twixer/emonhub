@@ -161,10 +161,10 @@ class EmonHubInterfacer(object):
 
         # If the node id is > 31, then we correct that
         if n > 31:
-            self._log.debug('The node ID is outside the range (>31), the value is corrected wiht a modulo 31.')
-            node = int(n) % 31
+            self._log.debug('The node ID is outside the range (>31), the value is corrected wiht a modulo 32.')
+            node = int(n) % 32
             received[0] = node
-            self._log.debug('The new node ID is : ' + node)
+            self._log.debug('The new node ID is : ' + str(node))
 
         # If it passes all the checks return
         return received
